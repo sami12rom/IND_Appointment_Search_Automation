@@ -2,9 +2,22 @@ import json
 from common_utilities.api.api_call import RESTAPI
 from datetime import datetime
 
-rest = RESTAPI()
-# DH for Den Haag
-result = rest.api_call(method='GET', url="https://oap.ind.nl/oap/api/desks/DH/slots/?productKey=DOC&persons=1")
+
+
+
+def check_appointments(type: str, locations: list):
+    '''
+    type: VAA for sticker on passport or DOC for Document
+    location: DH for Den Haag or AM for Amsterdam
+    '''
+    rest = RESTAPI()
+    available_appointments = {}
+    for location in locations:
+        result = rest.api_call(method='GET', url=f"https://oap.ind.nl/oap/api/desks/{location}/slots/?productKey={type}&persons=1")    
+        
+    
+
+
 schedule = json.loads(result[5:])['data']
 
 add_days = [(datetime.strptime(x['date'], '%Y-%m-%d').strftime('%A'), x) for x in schedule[:10]]
